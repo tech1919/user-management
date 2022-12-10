@@ -1,0 +1,42 @@
+version: '3.7'
+
+networks:
+  user_management:
+
+services:
+  db:
+    image: postgres
+    networks:
+      - user_management
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - 5432:5432
+
+  api:
+    image: user_fastapi
+    build: 
+      context: ./
+      dockerfile: ./Dockerfile
+    networks:
+      - user_management
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 80 --reload
+    ports:
+      - ${PORT}:80
+    links:
+      - db
