@@ -123,7 +123,8 @@ class GroupUpdate(BaseModel):
 
     #     return
 
-
+class GroupDelete(BaseModel):
+    message : str
 
 
 class EventCreate(BaseModel):

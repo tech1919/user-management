@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import File, UploadFile
-# from routes improt posts
-from routes import users
+
+from routes import users , groups
 from schemas.models import HealthResponse
 
 app = FastAPI(
@@ -20,6 +20,7 @@ app.add_middleware(
 )
 
 app.include_router(router=users.router , prefix="/users")
+app.include_router(router=groups.router , prefix="/groups")
 
 
 
