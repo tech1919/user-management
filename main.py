@@ -5,7 +5,7 @@ from fastapi import File, UploadFile
 from routes import (
     users,
     groups,
-    permissions,
+    roles,
 )
 from schemas.models import HealthResponse
 
@@ -25,7 +25,7 @@ app.add_middleware(
 
 app.include_router(router=users.router , prefix="/users")
 app.include_router(router=groups.router , prefix="/groups")
-app.include_router(router=permissions.router , prefix="/permissions")
+app.include_router(router=roles.router , prefix="/roles")
 
 
 

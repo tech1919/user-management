@@ -1,17 +1,11 @@
 import uuid
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, String , ForeignKey , Integer , JSON , Boolean
+from sqlalchemy import Column, String , ForeignKey , Integer , JSON , Boolean , DateTime
 from sqlalchemy.dialects.postgresql import UUID
 
 from typing import AsyncGenerator
-
+from datetime import datetime
 from database.connection import Base, engine
-
-
-
-
-# class User(SQLAlchemyBaseUserTableUUID, Base):
-#     pass
 
 
 
@@ -31,25 +25,24 @@ class User(Base):
     is_verified  = Column(Boolean , default = True)
 
 
-    # def get_user_permissions(self):
-    #     return session.query(PermissionEntities).filter_by(user_id=self.id).first()
-
 ########################
-# Permissions          #
+# Roles                #
 ########################
 
-class Permission(Base):
-    __tablename__ = 'permissions'
+
+class Role(Base):
+    __tablename__ = 'roles'
 
     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
     name = Column(String(50))
-    roles = Column(JSON , default = {} , nullable = False)
+    permissions = Column(JSON , default = {} , nullable = False)
 
-class PermissionEntities(Base):
-    __tablename__ = "permissions_entities"
+class RolesEntities(Base):
+    __tablename__ = "roles_entities"
+
     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    permission_id = Column(UUID(as_uuid=True), ForeignKey('permissions.id'))
-    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
+    role_id = Column(UUID(as_uuid=True), ForeignKey('roles.id'))
+    group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'))
 
 ########################
 # Groups               #
@@ -59,7 +52,7 @@ class Group(Base):
 
     __tablename__ = 'groups'
 
-    id = Column(UUID(as_uuid=True), primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
     name = Column(String)
 
 class GroupUser(Base):
@@ -69,7 +62,6 @@ class GroupUser(Base):
     group_id =  Column(UUID(as_uuid=True), ForeignKey('groups.id'))
     user_ids = Column(UUID(as_uuid=True), ForeignKey('users.id'))
 
-
 ########################
 # Events               #
 ########################
@@ -78,19 +70,19 @@ class Event(Base):
     __tablename__ = "events"
 
     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    event_src = Column(String)
-    name = Column(String(100))
-    content = Column(String)
+    event_src = Column(String , nullable = True)
+    name = Column(String(100) , nullable=False)
+    content = Column(JSON , nullable=False)
+    creation_date = Column(DateTime , default = datetime.now())
+    modify_date = Column(DateTime , default = datetime.now())
 
 class EventUser(Base):
+
     __tablename__ = "events_users"
 
     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-
     event_id = Column(UUID(as_uuid=True), ForeignKey('events.id'))
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
-
-
 
 
 
