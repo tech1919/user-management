@@ -61,7 +61,8 @@ class UserUpdate(BaseModel):
 class UserDelete(BaseModel):
     pass
 
-class RoleStatement(BaseModel):
+
+class PermissionStatment(BaseModel):
     resource : str
     actions : List[str] 
 
@@ -80,6 +81,9 @@ class PermissionCreate(BaseModel):
     #         return self
     #     else:
     #         return False
+
+class PermissionDelete(BaseModel):
+    message : str
 
 class PermissionUpdate(BaseModel):
 
