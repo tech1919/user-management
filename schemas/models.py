@@ -10,8 +10,8 @@ class HealthResponse(BaseModel):
         
 class UserCreate(BaseModel):
     name : str
-    # email : str
-    # hased_password : str
+    email : str
+    hased_password : str
     is_active : bool
     is_superuser : bool
     is_verified : bool
