@@ -1,8 +1,9 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
-from database.models import Group
+from database.models import Group , GroupUser , RolesEntities
 from schemas.models import GroupCreate , GroupUpdate , GroupDelete
 
+from datetime import datetime
 
 def group_create(db : Session , record : Group):
     db_record = Group(
@@ -34,3 +35,27 @@ def group_delete(db : Session , id : UUID):
     db.query(Group).filter_by(id = id).delete()
     db.commit()
     return GroupDelete(message = "Record deleted")
+
+
+def group_add_a_user(db : Session , user_id : UUID , group_id : UUID , expiry_date : datetime = None):
+    db_record = GroupUser(
+        group_id = group_id,
+        user_id = user_id,
+        expiry_date = expiry_date
+    )
+    db.add(db_record)
+    db.commit()
+    db.refresh(db_record)
+    return db_record
+
+
+def group_add_a_role(db : Session , role_id : UUID , group_id : UUID , expiry_date : datetime = None):
+    db_record = RolesEntities(
+        group_id = group_id,
+        role_id = role_id,
+        expiry_date = expiry_date
+    )
+    db.add(db_record)
+    db.commit()
+    db.refresh(db_record)
+    return db_record

@@ -2,9 +2,10 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from database.models import User
+from database.models import User , Group ,GroupUser
 from schemas.models import UserUpdate , UserCreate , UserDelete , UserCheck
 
+from datetime import datetime
 
 def user_create(db : Session , record : User):
     db_record = User(
@@ -46,3 +47,14 @@ def user_delete(db : Session , id : UUID):
     db.query(User).filter_by(id = id).delete()
     db.commit()
     return UserDelete(message = "Record deleted")
+
+def user_assign_to_group(db : Session , user_id : UUID , group_id : UUID , expiry_date : datetime = None):
+    db_record = GroupUser(
+        group_id = group_id,
+        user_id = user_id,
+        expiry_date = expiry_date
+    )
+    db.add(db_record)
+    db.commit()
+    db.refresh(db_record)
+    return db_record

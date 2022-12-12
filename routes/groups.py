@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
+from uuid import UUID
 from database.connection import get_db
 from schemas.models import GroupDelete , GroupCreate , GroupUpdate
 
@@ -11,6 +11,8 @@ from utils.group_crud import (
     group_get_one,
     group_update,
     groups_get_all,
+    group_add_a_user,
+    group_add_a_role,
 )
 
 router = APIRouter(tags=["groups"])
@@ -52,4 +54,30 @@ def delete_group(
     db : Session = Depends(get_db),
 ):
     return group_delete(db=db , id=id)
+
+
+@router.post(
+    "/add-a-user/{user_id}/{group_id}",
+    status_code=status.HTTP_201_CREATED,
+)
+def assign_user_to_group(
+    user_id : UUID,
+    group_id : UUID,
+    db : Session = Depends(get_db),
+):
+
+    return group_add_a_user(db=db , user_id=user_id , group_id=group_id)
+
+
+@router.post(
+    "/add-a-role/{role_id}/{group_id}",
+    status_code=status.HTTP_201_CREATED,
+)
+def assign_role_to_group(
+    role_id : UUID,
+    group_id : UUID,
+    db : Session = Depends(get_db),
+):
+
+    return group_add_a_role(db=db , role_id=role_id , group_id=group_id)
 

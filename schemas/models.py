@@ -2,7 +2,7 @@ from typing import Optional , List
 from uuid import UUID
 
 from pydantic import BaseModel
-
+from datetime import datetime
 
 class HealthResponse(BaseModel):
     status: str
@@ -31,9 +31,11 @@ class UserUpdate(BaseModel):
     is_active : bool
     is_superuser : bool
     is_verified : bool
+    creation_date : datetime
+    modify_date : datetime
 
 class UserDelete(BaseModel):
-    pass
+    message : str
 
 class Permission(BaseModel):
     resource : str
@@ -68,10 +70,12 @@ class GroupDelete(BaseModel):
 class GroupUserCreate(BaseModel):
     group_id : UUID
     user_ids : List[UUID]
+
 class GroupUserUpdate(BaseModel):
     pass
+
 class GroupUserdelete(BaseModel):
-    pass
+    message : str
 
 class EventCreate(BaseModel):
     pass
@@ -79,8 +83,6 @@ class EventCreate(BaseModel):
 class EventUpdate(BaseModel):
     pass
 
-
 class EventDelete(BaseModel):
-    pass
-
+    message : str
 

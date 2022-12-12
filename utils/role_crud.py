@@ -23,7 +23,6 @@ def has_permission(role : RoleUpdate , resource : str , action : str) -> bool:
     
     return False
 
-
 def role_create(db : Session , record : Role):
     db_record = Role(
         name=record.name, 
@@ -64,21 +63,33 @@ def role_remove_a_permission(
     permission : Permission,
     ):
 
-
-
     db_record = db.query(Role).filter_by(id = record.id).first()
 
 
-    # permission_to_remove = {
-    #         "resource" : permission.resource, # one string with the name of the resource
-    #         "actions" : permission.actions, # a list of strings
-    #         }
+    permission_to_remove = {
+            "resource" : permission.resource, # one string with the name of the resource
+            "actions" : permission.actions, # a list of strings
+            }
 
+    # for all the statments in this permission 
+    for i , s in enumerate(db_record.permissions["statments"]):
+        # if matching resource found for this role
+        if s["resource"] == permission_to_remove["resource"]:
+            # search matching action to remove
+            for action in permission_to_remove["actions"]:
+                
+                
+                try:
+                    # try to remove this action
+                    db_record.permissions["statments"][i]["actions"].remove(action)
+                    # check if now the statment is empty, if it is remove it too
+                    if len(db_record.permissions["statments"][i]["actions"]) == 0:
+                        db_record.permissions["statments"].pop(i)
+                except:
+                    pass
+  
 
     return role_update(db=db , record=db_record)
-
-
-
 
 def role_update(db: Session , record : RoleUpdate):
     update_query = {

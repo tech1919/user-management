@@ -14,10 +14,10 @@ from schemas.models import (
 from utils.role_crud import (
     role_create,
     role_get_all,
-    role_add_a_permission,
     role_delete,
     role_get_one,
-    role_update, 
+    role_update,
+    role_add_a_permission,
     role_remove_a_permission,
 )
 
@@ -57,7 +57,6 @@ def add_permission_to_role(
 ):
 
     return role_add_a_permission(db=db , record=record , permission=permission)
-
 
 @router.put("/update/remove-a-permission" , status_code=status.HTTP_200_OK, )
 def remove_permission_to_role(

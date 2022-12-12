@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
+from uuid import UUID
 from database.connection import get_db
 
 # from schemas.models import DeletePostResponse, Post, UpdatePost
@@ -13,6 +13,7 @@ from utils.user_crud import (
     user_get_all,
     user_get_one,
     user_update,
+    user_assign_to_group,
 )
 
 
@@ -54,6 +55,18 @@ def delete_user(
     db : Session = Depends(get_db),
 ):
     return user_delete(db=db , id=id)
+
+@router.post(
+    "/assign-to-group/{user_id}/{group_id}",
+    status_code=status.HTTP_201_CREATED,
+)
+def assign_user_to_group(
+    user_id : UUID,
+    group_id : UUID,
+    db : Session = Depends(get_db),
+):
+
+    return user_assign_to_group(db=db , user_id=user_id , group_id=group_id)
 
 
 
