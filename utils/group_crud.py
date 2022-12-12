@@ -38,24 +38,81 @@ def group_delete(db : Session , id : UUID):
 
 
 def group_add_a_user(db : Session , user_id : UUID , group_id : UUID , expiry_date : datetime = None):
-    db_record = GroupUser(
-        group_id = group_id,
-        user_id = user_id,
-        expiry_date = expiry_date
-    )
-    db.add(db_record)
-    db.commit()
-    db.refresh(db_record)
-    return db_record
+
+    try:
+        # check if already exists
+        record = db.query(GroupUser).filter(
+            GroupUser.user_id == user_id ,
+            GroupUser.group_id == group_id,
+            ).one()
+        return {"message" : "This user is already assign to this group"}
+    except:
+
+        db_record = GroupUser(
+            group_id = group_id,
+            user_id = user_id,
+            expiry_date = expiry_date
+        )
+        db.add(db_record)
+        db.commit()
+        db.refresh(db_record)
+        return db_record
+        
+
 
 
 def group_add_a_role(db : Session , role_id : UUID , group_id : UUID , expiry_date : datetime = None):
-    db_record = RolesEntities(
-        group_id = group_id,
-        role_id = role_id,
-        expiry_date = expiry_date
-    )
-    db.add(db_record)
+    
+    try:
+        # check if already exists
+        record = db.query(RolesEntities).filter(
+            RolesEntities.role_id == role_id ,
+            RolesEntities.group_id == group_id,
+            ).one()
+        return {"message" : "This role is already assign to this group"}
+    except:
+        db_record = RolesEntities(
+            group_id = group_id,
+            role_id = role_id,
+            expiry_date = expiry_date
+        )
+        db.add(db_record)
+        db.commit()
+        db.refresh(db_record)
+        return db_record
+    
+        
+
+def group_remove_a_user(db : Session , user_id : UUID , group_id : UUID):
+
+    record = db.query(GroupUser).filter(
+        GroupUser.user_id == user_id ,
+        GroupUser.group_id == group_id,
+        ).one()
+    if not record:
+        return GroupDelete(message = "Record does not exists")
+
+    db.query(GroupUser).filter(
+        GroupUser.user_id == user_id ,
+        GroupUser.group_id == group_id,
+        ).delete()
+
     db.commit()
-    db.refresh(db_record)
-    return db_record
+    return GroupDelete(message = "Record deleted")
+
+def group_remove_a_role(db : Session , role_id : UUID , group_id : UUID):
+
+    record = db.query(RolesEntities).filter(
+        RolesEntities.role_id == role_id ,
+        RolesEntities.group_id == group_id,
+        ).one()
+    if not record:
+        return GroupDelete(message = "Record does not exists")
+
+    db.query(RolesEntities).filter(
+        RolesEntities.role_id == role_id ,
+        RolesEntities.group_id == group_id,
+        ).delete()
+
+    db.commit()
+    return GroupDelete(message = "Record deleted")
