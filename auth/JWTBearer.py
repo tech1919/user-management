@@ -10,23 +10,20 @@ from starlette.status import HTTP_403_FORBIDDEN
 
 JWK = Dict[str, str]
 
-
 class JWKS(BaseModel):
     keys: List[JWK]
-
 
 class JWTAuthorizationCredentials(BaseModel):
     jwt_token: str
     header: Dict[str, str]
-    claims: Dict[str, str]
+    claims: Dict
     signature: str
     message: str
-
 
 class JWTBearer(HTTPBearer):
     def __init__(self, jwks: JWKS, auto_error: bool = True):
         super().__init__(auto_error=auto_error)
-
+        self.jwt_creds = None
         self.kid_to_jwk = {jwk["kid"]: jwk for jwk in jwks.keys}
 
     def verify_jwk_token(self, jwt_credentials: JWTAuthorizationCredentials) -> bool:
@@ -63,6 +60,7 @@ class JWTBearer(HTTPBearer):
                     signature=signature,
                     message=message,
                 )
+                self.jwt_creds = jwt_credentials
             except JWTError:
                 raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="JWK invalid")
 
