@@ -12,7 +12,7 @@ from schemas.models import HealthResponse
 
 
 # auth
-from auth.user_handlers import router as user_router
+from routes.user_handlers import router as user_router
 from auth.auth import jwks
 from auth.JWTBearer import JWTBearer
 
@@ -36,7 +36,7 @@ app.add_middleware(
 app.include_router(router=users.router , prefix="/users")
 app.include_router(router=groups.router , prefix="/groups")
 app.include_router(router=roles.router , prefix="/roles")
-app.include_router(router=user_router, prefix="/auth", dependencies=[Depends(auth)])
+app.include_router(router=user_router, prefix="/auth") # , dependencies=[Depends(auth)]
 
 
 @app.get("/", response_model=HealthResponse)

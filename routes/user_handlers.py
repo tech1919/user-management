@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
+
 router = APIRouter(tags=["auth"])
 
 # auth handel
 from auth.JWTBearer import JWTBearer
-from .auth import get_current_user
+from auth.auth import get_current_user
 from auth.auth import jwks
 auth = JWTBearer(jwks)
 
