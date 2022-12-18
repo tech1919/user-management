@@ -61,18 +61,18 @@ def group_add_a_user(db : Session , user_id : UUID , group_id : UUID , expiry_da
 
 
 
-def group_add_a_role(db : Session , role_id : UUID , group_id : UUID , expiry_date : datetime = None):
+def group_add_a_role(db : Session , role_id : UUID , cognito_group_name : str , expiry_date : datetime = None):
     
     try:
         # check if already exists
         record = db.query(RolesEntities).filter(
             RolesEntities.role_id == role_id ,
-            RolesEntities.group_id == group_id,
+            RolesEntities.cognito_group_name == cognito_group_name,
             ).one()
         return {"message" : "This role is already assign to this group"}
     except:
         db_record = RolesEntities(
-            group_id = group_id,
+            cognito_group_name = cognito_group_name,
             role_id = role_id,
             expiry_date = expiry_date
         )

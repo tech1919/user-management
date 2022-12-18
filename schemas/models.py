@@ -38,8 +38,7 @@ class UserDelete(BaseModel):
     message : str
 
 class Permission(BaseModel):
-    resource : str
-    actions : List[str]
+    statments : List[str]
 
 class RoleCreate(BaseModel):
 

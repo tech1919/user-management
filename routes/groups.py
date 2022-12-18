@@ -70,16 +70,16 @@ def assign_user_to_group(
     return group_add_a_user(db=db , user_id=user_id , group_id=group_id)
 
 @router.post(
-    "/add-a-role/{role_id}/{group_id}",
+    "/add-a-role/{role_id}/{cognito_group_name}",
     status_code=status.HTTP_201_CREATED,
 )
 def assign_role_to_group(
     role_id : UUID,
-    group_id : UUID,
+    cognito_group_name : str,
     db : Session = Depends(get_db),
 ):
 
-    return group_add_a_role(db=db , role_id=role_id , group_id=group_id)
+    return group_add_a_role(db=db , role_id=role_id , cognito_group_name=cognito_group_name)
 
 @router.delete(
     "/remove-a-user/{user_id}/{group_id}",

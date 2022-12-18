@@ -41,54 +41,37 @@ def role_get_one(db: Session , id : UUID):
 
 def role_add_a_permission(
     db : Session , 
-    record : RoleUpdate , 
+    role_id : UUID , 
     permission : Permission,
     ):
 
-    db_record = db.query(Role).filter_by(id = record.id).first()
-    new_permission = {
-            "resource" : permission.resource, # one string with the name of the resource
-            "actions" : permission.actions, # a list of strings
-            }
-    try:
-        db_record.permissions["statments"].append(new_permission)
-    except:
-        db_record.permissions["statments"] = [new_permission]
-    finally:
-        return role_update(db=db , record=db_record)
+    db_record = db.query(Role).filter_by(id = role_id).first()
 
+    try:
+        # adding to the list of statments
+        db_record.permissions["statments"] += permission.statments
+    except:
+        # if the list is empty - declare as a list
+        db_record.permissions["statments"] = permission.statments
+    finally:
+
+        # update the role
+        return role_update(db=db , record=db_record)
+        
 def role_remove_a_permission(
     db : Session , 
-    record : RoleUpdate , 
-    permission : Permission,
+    role_id : UUID , 
+    permission : Permission, 
     ):
 
-    db_record = db.query(Role).filter_by(id = record.id).first()
+    db_record = db.query(Role).filter_by(id = role_id).first()
 
-
-    permission_to_remove = {
-            "resource" : permission.resource, # one string with the name of the resource
-            "actions" : permission.actions, # a list of strings
-            }
-
-    # for all the statments in this permission 
-    for i , s in enumerate(db_record.permissions["statments"]):
-        # if matching resource found for this role
-        if s["resource"] == permission_to_remove["resource"]:
-            # search matching action to remove
-            for action in permission_to_remove["actions"]:
-                
-                
-                try:
-                    # try to remove this action
-                    db_record.permissions["statments"][i]["actions"].remove(action)
-                    # check if now the statment is empty, if it is remove it too
-                    if len(db_record.permissions["statments"][i]["actions"]) == 0:
-                        db_record.permissions["statments"].pop(i)
-                except:
-                    pass
-  
-
+    # Permission has a field of statments that is a list of strings
+    for statment in permission.statments:
+        if statment in db_record.permissions["statments"]:
+            db_record.permissions["statments"].remove(statment)
+        
+    # update the role
     return role_update(db=db , record=db_record)
 
 def role_update(db: Session , record : RoleUpdate):

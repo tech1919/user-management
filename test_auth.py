@@ -16,3 +16,5 @@ x = requests.get(url , headers=header)
 with open("user_creds.json" , "w") as f:
     print(x.json())
     f.write(json.dumps(x.json()))
+
+

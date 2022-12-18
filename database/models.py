@@ -48,7 +48,8 @@ class RolesEntities(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
     role_id = Column(UUID(as_uuid=True), ForeignKey('roles.id'))
-    group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'))
+    # group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'))
+    cognito_group_name = Column(String)
     expiry_date = Column(DateTime , nullable = True)
 
 ########################
