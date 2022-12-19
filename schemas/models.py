@@ -1,12 +1,24 @@
 from typing import Optional , List
 from uuid import UUID
+from pydantic_sqlalchemy import sqlalchemy_to_pydantic
+from database.models import (
+    User,
+    Group,
+    Role,
+    RolesEntities,
+)
 
 from pydantic import BaseModel
 from datetime import datetime
 
 class HealthResponse(BaseModel):
     status: str
-  
+
+########################
+# Users                #
+########################
+
+
 class UserCreate(BaseModel):
     name : str
     email : str

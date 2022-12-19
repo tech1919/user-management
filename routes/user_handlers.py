@@ -14,12 +14,20 @@ auth = JWTBearer(jwks)
 users_read_permission_check = PermissionCheck(statments=["events:read" , "events:write" , "aoi:read"])
 
 
-@router.get("/secure", 
+@router.get("/secure/withpermissions", 
 description="this route is an example for a secure route",
 dependencies=[Depends(users_read_permission_check)],)
+async def secure_with_permissions():
+    
+    return {"message" : "You have access"}
+
+
+@router.get("/secure", 
+description="this route is an example for a secure route",
+dependencies=[Depends(auth)],)
 async def secure():
     
-    return "You have access"
+    return auth.jwt_creds
 
 
 @router.get("/not_secure",

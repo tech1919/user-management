@@ -100,18 +100,18 @@ def group_remove_a_user(db : Session , user_id : UUID , group_id : UUID):
     db.commit()
     return GroupDelete(message = "Record deleted")
 
-def group_remove_a_role(db : Session , role_id : UUID , group_id : UUID):
+def group_remove_a_role(db : Session , role_id : UUID , group_name : str):
 
     record = db.query(RolesEntities).filter(
         RolesEntities.role_id == role_id ,
-        RolesEntities.group_id == group_id,
+        RolesEntities.cognito_group_name == group_name,
         ).one()
     if not record:
         return GroupDelete(message = "Record does not exists")
 
     db.query(RolesEntities).filter(
         RolesEntities.role_id == role_id ,
-        RolesEntities.group_id == group_id,
+        RolesEntities.cognito_group_name == group_name,
         ).delete()
 
     db.commit()

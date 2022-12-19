@@ -94,14 +94,14 @@ def remove_user_from_group(
     return group_remove_a_user(db=db , user_id=user_id , group_id=group_id)
 
 @router.delete(
-    "/remove-a-role/{role_id}/{group_id}",
+    "/remove-a-role/{role_id}/{group_name}",
     status_code=status.HTTP_202_ACCEPTED,
 )
 def remove_role_from_group(
     role_id : UUID ,
-    group_id : UUID ,
+    group_name : str ,
     db : Session = Depends(get_db)
 ):
 
-    return group_remove_a_role(db=db , role_id=role_id , group_id=group_id)
+    return group_remove_a_role(db=db , role_id=role_id , group_name=group_name)
 

@@ -2,6 +2,10 @@ from fastapi import FastAPI , Depends , Security , HTTPException , status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import File, UploadFile
 from fastapi.staticfiles import StaticFiles
+import subprocess
+import platform
+from pydantic import create_model
+
 
 from routes import (
     users,
@@ -43,6 +47,10 @@ app.include_router(router=user_router, prefix="/auth") # , dependencies=[Depends
 async def health():
     return HealthResponse(status="Ok")
 
+
+@app.get('/test')
+async def run_test():
+    subprocess.run(['pytest'])
 
 
 
