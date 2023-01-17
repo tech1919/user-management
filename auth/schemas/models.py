@@ -1,12 +1,7 @@
 from typing import Optional , List
 from uuid import UUID
 from pydantic_sqlalchemy import sqlalchemy_to_pydantic
-from database.models import (
-    User,
-    Group,
-    Role,
-    RolesEntities,
-)
+# from database.models import *
 
 from pydantic import BaseModel
 from datetime import datetime
@@ -50,7 +45,7 @@ class UserDelete(BaseModel):
     message : str
 
 class Permission(BaseModel):
-    statments : List[str]
+    statements : List[str]
 
 class RoleCreate(BaseModel):
 

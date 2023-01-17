@@ -5,9 +5,9 @@ from uuid import UUID
 from database.connection import get_db
 
 # from schemas.models import DeletePostResponse, Post, UpdatePost
-from schemas.models import UserCreate , UserDelete , UserUpdate , UserCheck
+from auth.schemas.models import UserCreate , UserDelete , UserUpdate , UserCheck
 
-from utils.user_crud import (
+from auth.utils.user_crud import (
     user_create,
     user_delete,
     user_get_all,
@@ -17,7 +17,7 @@ from utils.user_crud import (
 )
 
 
-router = APIRouter(tags=["users"])
+router = APIRouter(tags=["Users"])
 
 
 @router.post("/create" , status_code=status.HTTP_201_CREATED) # response_model=UserCreate

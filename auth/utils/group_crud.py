@@ -1,7 +1,7 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
-from database.models import Group , GroupUser , RolesEntities
-from schemas.models import GroupCreate , GroupUpdate , GroupDelete
+from auth.models import Group , GroupUser , RolesEntities
+from auth.schemas.models import GroupCreate , GroupUpdate , GroupDelete
 
 from datetime import datetime
 

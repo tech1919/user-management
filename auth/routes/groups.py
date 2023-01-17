@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from uuid import UUID
 from database.connection import get_db
-from schemas.models import GroupDelete , GroupCreate , GroupUpdate
+from auth.schemas.models import GroupDelete , GroupCreate , GroupUpdate
 
-from utils.group_crud import (
+from auth.utils.group_crud import (
     group_create,
     group_delete,
     group_get_one,
@@ -17,7 +17,7 @@ from utils.group_crud import (
     group_remove_a_user,
 )
 
-router = APIRouter(tags=["groups"])
+router = APIRouter(tags=["Groups"])
 
 
 

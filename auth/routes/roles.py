@@ -4,14 +4,14 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 from database.connection import get_db
 
-from schemas.models import (
+from auth.schemas.models import (
     RoleDelete,
     RoleCreate,
     RoleUpdate,
     Permission,
 )
 
-from utils.role_crud import (
+from auth.utils.role_crud import (
     role_create,
     role_get_all,
     role_delete,
@@ -21,7 +21,7 @@ from utils.role_crud import (
     role_remove_a_permission,
 )
 
-router = APIRouter(tags=["roles"])
+router = APIRouter(tags=["Roles"])
 
 
 @router.post("/create" , status_code=status.HTTP_201_CREATED) # response_model=UserCreate

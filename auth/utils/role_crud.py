@@ -1,8 +1,8 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
 
-from database.models import Role
-from schemas.models import (
+from auth.models import Role
+from auth.schemas.models import (
     RoleCreate , 
     RoleUpdate , 
     RoleDelete ,
@@ -49,10 +49,10 @@ def role_add_a_permission(
 
     try:
         # adding to the list of statments
-        db_record.permissions["statments"] += permission.statments
+        db_record.permissions["statements"] += permission.statements
     except:
         # if the list is empty - declare as a list
-        db_record.permissions["statments"] = permission.statments
+        db_record.permissions["statements"] = permission.statements
     finally:
 
         # update the role
@@ -66,10 +66,10 @@ def role_remove_a_permission(
 
     db_record = db.query(Role).filter_by(id = role_id).first()
 
-    # Permission has a field of statments that is a list of strings
-    for statment in permission.statments:
-        if statment in db_record.permissions["statments"]:
-            db_record.permissions["statments"].remove(statment)
+    # Permission has a field of statements that is a list of strings
+    for statement in permission.statements:
+        if statement in db_record.permissions["statements"]:
+            db_record.permissions["statements"].remove(statement)
         
     # update the role
     return role_update(db=db , record=db_record)

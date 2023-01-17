@@ -6,95 +6,27 @@ from sqlalchemy.dialects.postgresql import UUID
 from typing import AsyncGenerator
 from datetime import datetime
 from database.connection import Base, engine
+from auth.models import *
 
 
-########################
-# Users                #
-########################
+# class Event(Base):
 
-class User(Base):
+#     __tablename__ = "events"
 
-    __tablename__ = 'users'
+#     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
+#     event_src = Column(String , nullable = True)
+#     name = Column(String(100) , nullable=False)
+#     content = Column(JSON , nullable=False)
+#     creation_date = Column(DateTime , default = datetime.now())
+#     modify_date = Column(DateTime , default = datetime.now())
 
-    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    name = Column(String(340) , nullable=True)
-    email = Column(String(340) , nullable=True)
-    hased_password = Column(String(1024) , nullable=True)
-    is_active = Column(Boolean , default = True)
-    is_superuser  = Column(Boolean , default = False)
-    is_verified  = Column(Boolean , default = True)
-    creation_date = Column(DateTime , nullable=True , default = datetime.now())
-    modify_date = Column(DateTime , nullable=True , default = datetime.now())
-    user_metadata = Column(JSON , nullable=True)
+# class EventUser(Base):
 
-########################
-# Roles                #
-########################
+#     __tablename__ = "events_users"
 
-class Role(Base):
-
-    __tablename__ = 'roles'
-
-    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    name = Column(String(50))
-    permissions = Column(JSON , default = {} , nullable = False)
-    creation_date = Column(DateTime , nullable = False , default = datetime.now())
-    modify_date = Column(DateTime , nullable = False , default = datetime.now())
-    expiry_date = Column(DateTime , nullable = True)
-
-class RolesEntities(Base):
-
-    __tablename__ = "roles_entities"
-
-    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    role_id = Column(UUID(as_uuid=True), ForeignKey('roles.id'))
-    # group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'))
-    cognito_group_name = Column(String)
-    expiry_date = Column(DateTime , nullable = True)
-
-########################
-# Groups               #
-########################
-
-class Group(Base):
-
-    __tablename__ = 'groups'
-
-    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    name = Column(String)
-    creation_date = Column(DateTime , nullable = False , default = datetime.now())
-
-class GroupUser(Base):
-
-    __tablename__ = "groups_users"
-
-    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    group_id =  Column(UUID(as_uuid=True), ForeignKey('groups.id'))
-    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
-    expiry_date  = Column(DateTime , nullable = True)
-
-########################
-# Events               #
-########################
-
-class Event(Base):
-
-    __tablename__ = "events"
-
-    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    event_src = Column(String , nullable = True)
-    name = Column(String(100) , nullable=False)
-    content = Column(JSON , nullable=False)
-    creation_date = Column(DateTime , default = datetime.now())
-    modify_date = Column(DateTime , default = datetime.now())
-
-class EventUser(Base):
-
-    __tablename__ = "events_users"
-
-    id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    event_id = Column(UUID(as_uuid=True), ForeignKey('events.id'))
-    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
+#     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
+#     event_id = Column(UUID(as_uuid=True), ForeignKey('events.id'))
+#     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
 
 
 # Base.metadata.drop_all(engine)

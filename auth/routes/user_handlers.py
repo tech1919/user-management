@@ -5,18 +5,22 @@ router = APIRouter(tags=["auth"])
 from auth.JWTBearer import JWTBearer
 from auth.auth import jwks
 from auth.permission import PermissionCheck
+from auth.permission import (
+    users_read_permission_check,
+    event_write_permission_check,
+)
 
 
 auth = JWTBearer(jwks)
 
 
 
-users_read_permission_check = PermissionCheck(statments=["events:read" , "events:write" , "aoi:read"])
+
 
 
 @router.get("/secure/withpermissions", 
 description="this route is an example for a secure route",
-dependencies=[Depends(users_read_permission_check)],)
+dependencies=[Depends(users_read_permission_check ) ,Depends(event_write_permission_check)],)
 async def secure_with_permissions():
     
     return {"message" : "You have access"}
@@ -32,7 +36,6 @@ async def secure():
 
 @router.get("/not_secure",
 description="this route is an example for a non secure route",
-
 )
 async def not_secure(
 

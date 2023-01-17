@@ -2,8 +2,8 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from database.models import User , Group ,GroupUser
-from schemas.models import UserUpdate , UserCreate , UserDelete , UserCheck
+from auth.models import User , Group ,GroupUser
+from auth.schemas.models import UserUpdate , UserCreate , UserDelete , UserCheck
 
 from datetime import datetime
 
