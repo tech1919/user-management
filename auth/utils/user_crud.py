@@ -9,8 +9,9 @@ from datetime import datetime
 
 def user_create(db : Session , record : User):
     db_record = User(
-        name=record.name, 
-        email=record.email,
+        # name=record.name, 
+        # email=record.email,
+        cognito_id=record.cognito_id,
         hased_password=record.hased_password,
         is_active = record.is_active,
         is_superuser = record.is_superuser,
@@ -27,10 +28,21 @@ def user_get_all(db: Session):
 def user_get_one(db: Session , id : UUID):
     return db.query(User).filter_by(id=id).one()
 
+def user_get_metadata(db: Session , id : UUID):
+    record = db.query(User).filter_by(id = id).one()
+    return record.user_metadata
+
+def user_update_metadata(db : Session , id : UUID , metadata : dict):
+    record = user_get_one(db=db , id=id)
+    record.user_metadata = metadata
+    db.commit()
+    record = user_get_one(db=db , id=id)
+    return record
+
 def user_update(db: Session , record : UserUpdate):
     update_query = {
-        User.name : record.name ,
-        User.email : record.email ,
+        # User.name : record.name ,
+        # User.email : record.email ,
         User.hased_password : record.hased_password ,
         User.is_active : record.is_active ,
         User.is_superuser : record.is_superuser ,

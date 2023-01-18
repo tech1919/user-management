@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 from database.connection import get_db
 
-# from schemas.models import DeletePostResponse, Post, UpdatePost
+from auth.models import User
 from auth.schemas.models import UserCreate , UserDelete , UserUpdate , UserCheck
 
 from auth.utils.user_crud import (
@@ -14,6 +14,8 @@ from auth.utils.user_crud import (
     user_get_one,
     user_update,
     user_assign_to_group,
+    user_get_metadata,
+    user_update_metadata,
 )
 
 
@@ -37,6 +39,14 @@ def get_all_users(
 @router.get("/get/{id}", status_code=status.HTTP_200_OK, ) # response_model=UserCreate
 def get_one_user(id, db: Session = Depends(get_db)):
     return user_get_one(db=db, id=id)
+
+@router.get("/get/metadata/{id}" , status_code=status.HTTP_200_OK)
+def get_user_metadata(id , db : Session = Depends(get_db)):
+    return user_get_metadata(id=id , db=db) 
+
+@router.put("/update/metadata/{id}" , status_code=status.HTTP_200_OK)
+def update_user_metadata(id , metadata : dict , db : Session = Depends(get_db)):
+    return user_update_metadata(id=id , db=db , metadata=metadata)
 
 @router.put("/update" , status_code=status.HTTP_200_OK , ) # response_model=UserCreate
 def update_user(

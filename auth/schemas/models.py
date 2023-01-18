@@ -1,11 +1,8 @@
 from typing import Optional , List
 from uuid import UUID
-from pydantic_sqlalchemy import sqlalchemy_to_pydantic
 # from database.models import *
-
 from pydantic import BaseModel
 from datetime import datetime
-
 class HealthResponse(BaseModel):
     status: str
 
@@ -15,12 +12,13 @@ class HealthResponse(BaseModel):
 
 
 class UserCreate(BaseModel):
-    name : str
-    email : str
+    cognito_id : str
     hased_password : str
     is_active : bool
     is_superuser : bool
     is_verified : bool
+    user_metadata : dict
+    
 
 class UserCheck(BaseModel):
 
@@ -40,6 +38,7 @@ class UserUpdate(BaseModel):
     is_verified : bool
     creation_date : datetime
     modify_date : datetime
+    user_metadata : dict
 
 class UserDelete(BaseModel):
     message : str

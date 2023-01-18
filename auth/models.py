@@ -17,7 +17,9 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    cognito_id = Column(UUID(as_uuid=True))
+    # cognito_id = Column(UUID(as_uuid=True))
+    cognito_id = Column(String)
+    hased_password = Column(String , nullable = True)
     is_active = Column(Boolean , default = True)
     is_superuser  = Column(Boolean , default = False)
     is_verified  = Column(Boolean , default = True)
